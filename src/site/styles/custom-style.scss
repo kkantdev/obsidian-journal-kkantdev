@@ -1,0 +1,316 @@
+body {
+    /***
+      ADD YOUR CUSTOM STYLING HERE. (INSIDE THE body {...} section.)
+      IT WILL TAKE PRECEDENCE OVER THE STYLING IN THE STYLE.CSS FILE.
+   ***/
+    
+    /* Color System - Updated for clean desktop-app-like interface */
+    --background-primary: #0f1419; /* Dark blue-gray background */
+    --background-secondary: #1a2029; /* Slightly lighter sidebar background */
+    --background-primary-alt: #151b24; /* Alternate background */
+    --background-secondary-alt: #222831; /* Alternate sidebar background */
+    
+    --text-normal: #e6edf3; /* Primary text - light gray-blue */
+    --text-muted: #8b949e; /* Secondary text - medium gray */
+    --text-faint: #6e7681; /* Tertiary text - dark gray */
+    --text-accent: #58a6ff; /* Accent color - bright blue */
+    
+    --link-color: var(--text-accent);
+    --link-color-hover: #79c0ff; /* Lighter blue for hover */
+    --link-unresolved-color: var(--text-muted);
+    --link-unresolved-opacity: 0.6;
+    
+    --interactive-normal: #30363d; /* Interactive element background */
+    --interactive-hover: #3c444d; /* Interactive hover */
+    --interactive-accent: var(--text-accent);
+    --interactive-accent-hover: #79c0ff;
+    
+    /* Border colors */
+    --background-modifier-border: #30363d;
+    --background-modifier-border-hover: #3c444d;
+    
+    /* Button colors */
+    --dg-search-btn-bg: var(--interactive-normal);
+    --dg-search-btn-color: var(--text-normal);
+    --dg-search-btn-border: var(--background-modifier-border);
+    --dg-search-btn-hover-bg: var(--interactive-hover);
+    --dg-search-btn-hover-border: var(--background-modifier-border-hover);
+    
+    /* File tree specific colors */
+    --dg-notelink-hover-bg: rgba(88, 166, 255, 0.08); /* Subtle blue tint on hover */
+    --dg-filetree-border-color: var(--background-modifier-border);
+    
+    /* Sidebar colors */
+    --dg-sidebar-bg: var(--background-secondary);
+    --dg-sidebar-border: var(--background-modifier-border);
+    
+    /* Graph colors */
+    --dg-graph-bg: var(--background-primary);
+    --dg-graph-border-color: var(--background-modifier-border);
+    --dg-graph-node-color: var(--text-accent);
+    --dg-graph-node-color-muted: var(--text-muted);
+    
+    /* Overlay background */
+    --dg-overlay-bg: rgba(15, 20, 25, 0.85);
+    
+    /* Layout adjustments for compact design */
+    --dg-content-max-width: 800px;
+    --dg-content-padding-top: 80px;
+    --dg-content-padding-top-mobile: 70px;
+    --dg-content-font-size: 16px;
+    --dg-content-line-height: 1.6;
+    
+    /* Compact sidebar sizing */
+    --dg-filetree-width: 240px;
+    --dg-filetree-min-width: 240px;
+    --dg-filetree-padding: 12px 16px;
+    --dg-filetree-gap: 60px;
+    
+    --dg-sidebar-max-width: 300px;
+    --dg-sidebar-gap: 60px;
+    --dg-sidebar-container-padding: 16px;
+    
+    /* Compact button styling */
+    --dg-search-btn-height: 28px;
+    --dg-search-btn-padding: 0 12px;
+    --dg-search-btn-radius: 6px;
+    --dg-search-btn-font-size: 0.8rem;
+    --dg-search-btn-gap: 6px;
+    --dg-search-btn-icon-size: 12px;
+    
+    /* File tree item sizing */
+    --dg-notelink-padding: 4px 8px 4px 10px;
+    --dg-notelink-size: 0.8rem;
+    --dg-notelink-border-width: 1px;
+    
+    --dg-folder-icon-size: 12px;
+    --dg-inner-folder-margin: 10px;
+    --dg-filelist-margin: 6px;
+    
+    /* Navbar compact sizing */
+    --dg-navbar-height: 56px;
+    --dg-logo-height: 36px;
+    --dg-logo-height-mobile: 28px;
+    --dg-filetree-logo-height: 60px;
+}
+
+/* Button redesign - clean, compact style */
+.search-button {
+    background-color: var(--dg-search-btn-bg) !important;
+    color: var(--dg-search-btn-color) !important;
+    border: 1px solid var(--dg-search-btn-border) !important;
+    border-radius: var(--dg-search-btn-radius) !important;
+    height: var(--dg-search-btn-height) !important;
+    padding: var(--dg-search-btn-padding) !important;
+    font-size: var(--dg-search-btn-font-size) !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: var(--dg-search-btn-gap) !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    text-decoration: none !important;
+}
+
+.search-button:hover {
+    background-color: var(--dg-search-btn-hover-bg) !important;
+    border-color: var(--dg-search-btn-hover-border) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.search-button:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.search-button .search-icon {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.search-button .search-icon i {
+    width: var(--dg-search-btn-icon-size) !important;
+    height: var(--dg-search-btn-icon-size) !important;
+}
+
+.search-button .search-text {
+    white-space: nowrap !important;
+}
+
+.search-button .search-keys {
+    display: none !important; /* Hide keyboard shortcuts for cleaner look */
+}
+
+/* File tree sidebar improvements */
+.filetree-wrapper {
+    border-right: 1px solid var(--dg-filetree-border-color) !important;
+}
+
+.filetree-sidebar {
+    background-color: var(--background-secondary) !important;
+}
+
+.foldername-wrapper {
+    font-weight: 600 !important;
+    color: var(--text-normal) !important;
+    padding: 6px 4px !important;
+    border-radius: 4px !important;
+    transition: background-color 0.15s ease !important;
+}
+
+.foldername-wrapper:hover {
+    background-color: var(--interactive-hover) !important;
+}
+
+.foldername-wrapper i {
+    color: var(--text-muted) !important;
+    transition: transform 0.2s ease !important;
+}
+
+.foldername-wrapper:hover i {
+    color: var(--text-normal) !important;
+}
+
+.filelist {
+    border-left: 1px solid var(--background-modifier-border) !important;
+    margin-left: var(--dg-filelist-margin) !important;
+    padding-left: 8px !important;
+}
+
+.notelink {
+    border-left: var(--dg-notelink-border-width) solid transparent !important;
+    transition: all 0.15s ease !important;
+    border-radius: 4px !important;
+    margin: 2px 0 !important;
+}
+
+.notelink:hover {
+    background-color: var(--dg-notelink-hover-bg) !important;
+    border-left-color: var(--text-accent) !important;
+}
+
+.notelink.active-note {
+    background-color: rgba(88, 166, 255, 0.12) !important;
+    border-left-color: var(--text-accent) !important;
+}
+
+.notelink.active-note .filename {
+    color: var(--text-accent) !important;
+    font-weight: 500 !important;
+}
+
+.filename {
+    color: var(--text-normal) !important;
+    transition: color 0.15s ease !important;
+}
+
+.filename:hover {
+    color: var(--text-accent) !important;
+    text-decoration: none !important;
+}
+
+/* Scrollbar styling */
+.filetree-sidebar > .folder {
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--text-muted) transparent !important;
+}
+
+.filetree-sidebar > .folder::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+.filetree-sidebar > .folder::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.filetree-sidebar > .folder::-webkit-scrollbar-thumb {
+    background-color: var(--text-muted) !important;
+    border-radius: 3px !important;
+}
+
+.filetree-sidebar > .folder::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-normal) !important;
+}
+
+/* Page panel toggle button (mobile sidebar) */
+.page-panel-toggle {
+    background-color: var(--dg-search-btn-bg) !important;
+    color: var(--dg-search-btn-color) !important;
+    border: 1px solid var(--dg-search-btn-border) !important;
+    border-radius: var(--dg-search-btn-radius) !important;
+    height: var(--dg-search-btn-height) !important;
+    padding: 0 12px !important;
+    font-size: var(--dg-search-btn-font-size) !important;
+    transition: all 0.15s ease !important;
+}
+
+.page-panel-toggle:hover {
+    background-color: var(--dg-search-btn-hover-bg) !important;
+    border-color: var(--dg-search-btn-hover-border) !important;
+}
+
+/* Graph controls */
+.graph-controls {
+    background-color: var(--dg-search-btn-bg) !important;
+    color: var(--dg-search-btn-color) !important;
+    border: 1px solid var(--dg-search-btn-border) !important;
+    border-radius: var(--dg-graph-ctrl-radius) !important;
+    padding: var(--dg-graph-ctrl-padding) !important;
+    font-size: var(--dg-graph-ctrl-size) !important;
+    transition: all 0.15s ease !important;
+}
+
+.graph-controls:hover {
+    background-color: var(--dg-search-btn-hover-bg) !important;
+    border-color: var(--dg-search-btn-hover-border) !important;
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: var(--background-secondary) !important;
+    border-bottom: 1px solid var(--background-modifier-border) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Right sidebar styling */
+.sidebar {
+    background-color: var(--dg-sidebar-bg) !important;
+    border-left: 1px solid var(--dg-sidebar-border) !important;
+}
+
+/* Content area improvements */
+.content {
+    background-color: var(--background-primary) !important;
+    border-radius: 8px !important;
+    padding: 32px 40px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    margin-top: 20px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+    .content {
+        padding: 24px 32px !important;
+        margin-top: 16px !important;
+    }
+}
+
+@media (max-width: 800px) {
+    .content {
+        padding: 20px 24px !important;
+        margin-top: 12px !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+    
+    .search-button .search-text {
+        display: none !important; /* Hide text on mobile for cleaner button */
+    }
+    
+    .search-button {
+        padding: 0 10px !important;
+        min-width: 36px !important;
+        justify-content: center !important;
+    }
+}
