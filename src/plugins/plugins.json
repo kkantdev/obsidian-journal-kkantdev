@@ -1,0 +1,6 @@
+{
+  "plugins": {
+    "copy-code": { "enabled": true },
+    "theme-switcher": { "enabled": true }
+  }
+}

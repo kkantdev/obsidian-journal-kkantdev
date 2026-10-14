@@ -1,0 +1,70 @@
+<script>
+(function () {
+  "use strict";
+
+  function attachCopyButtons() {
+    // Target every <pre><code> block rendered by markdown-it / Eleventy
+    document.querySelectorAll("pre:not([data-copy-attached])").forEach(function (pre) {
+      var code = pre.querySelector("code");
+      if (!code) return;
+
+      pre.setAttribute("data-copy-attached", "true");
+      // Ensure the pre has position:relative so the button can be placed inside
+      pre.style.position = "relative";
+
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "copy-code-btn";
+      btn.setAttribute("aria-label", "Copy code");
+      btn.setAttribute("title", "Copy code");
+      btn.textContent = "Copy";
+
+      btn.addEventListener("click", function () {
+        var text = code.innerText; // innerText preserves whitespace + line breaks
+        navigator.clipboard.writeText(text).then(
+          function () {
+            btn.textContent = "Copied ✓";
+            btn.classList.add("copy-code-btn--copied");
+            setTimeout(function () {
+              btn.textContent = "Copy";
+              btn.classList.remove("copy-code-btn--copied");
+            }, 2000);
+          },
+          function () {
+            // Fallback for browsers without Clipboard API (e.g. non-secure contexts)
+            try {
+              var ta = document.createElement("textarea");
+              ta.value = text;
+              ta.style.position = "fixed";
+              ta.style.opacity = "0";
+              document.body.appendChild(ta);
+              ta.focus();
+              ta.select();
+              document.execCommand("copy");
+              document.body.removeChild(ta);
+              btn.textContent = "Copied ✓";
+              btn.classList.add("copy-code-btn--copied");
+              setTimeout(function () {
+                btn.textContent = "Copy";
+                btn.classList.remove("copy-code-btn--copied");
+              }, 2000);
+            } catch (e) {
+              btn.textContent = "Failed";
+              setTimeout(function () { btn.textContent = "Copy"; }, 2000);
+            }
+          }
+        );
+      });
+
+      pre.appendChild(btn);
+    });
+  }
+
+  // Run after DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", attachCopyButtons);
+  } else {
+    attachCopyButtons();
+  }
+})();
+</script>

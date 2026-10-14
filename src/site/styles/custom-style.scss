@@ -314,3 +314,198 @@ body {
         justify-content: center !important;
     }
 }
+
+/* ============================================================
+   COPY CODE BUTTON
+   ============================================================ */
+
+pre {
+    position: relative !important;
+}
+
+.copy-code-btn {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    z-index: 10 !important;
+
+    /* Size & shape */
+    padding: 3px 9px !important;
+    height: 24px !important;
+    border-radius: 5px !important;
+    font-size: 0.72rem !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+
+    /* Colors - use existing design-system variables */
+    background-color: var(--interactive-normal) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--background-modifier-border) !important;
+
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease !important;
+
+    /* Don't inherit mono font from <pre> */
+    font-family: inherit !important;
+}
+
+.copy-code-btn:hover {
+    background-color: var(--interactive-hover) !important;
+    color: var(--text-normal) !important;
+    border-color: var(--background-modifier-border-hover) !important;
+}
+
+.copy-code-btn:focus-visible {
+    outline: 2px solid var(--text-accent) !important;
+    outline-offset: 2px !important;
+}
+
+.copy-code-btn--copied {
+    color: #3fb950 !important;
+    border-color: rgba(63, 185, 80, 0.4) !important;
+}
+
+/* Ensure copy button stays in corner when pre has horizontal scroll */
+pre > .copy-code-btn {
+    position: sticky !important;
+    float: right !important;
+    top: 8px !important;
+    right: 8px !important;
+    /* Clear sticky float so it doesn't affect code layout */
+    margin-top: -32px !important;
+    margin-bottom: 8px !important;
+}
+
+/* ============================================================
+   THEME TOGGLE BUTTON  (filetree.actions slot)
+   ============================================================ */
+
+.theme-toggle-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    padding: 6px 8px !important;
+    margin-top: 8px !important;
+    border-radius: 6px !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+
+    background-color: transparent !important;
+    color: var(--text-muted) !important;
+    border: 1px solid transparent !important;
+
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease !important;
+    text-align: left !important;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--interactive-hover) !important;
+    color: var(--text-normal) !important;
+    border-color: var(--background-modifier-border) !important;
+}
+
+.theme-toggle-btn:focus-visible {
+    outline: 2px solid var(--text-accent) !important;
+    outline-offset: 2px !important;
+}
+
+.theme-toggle-btn:active {
+    background-color: var(--interactive-normal) !important;
+}
+
+.theme-toggle-label {
+    font-size: 0.78rem !important;
+    color: inherit !important;
+}
+
+/* ============================================================
+   LIGHT MODE  — overrides when [data-theme="light"]
+   ============================================================ */
+
+[data-theme="light"] body,
+[data-theme="light"],
+body[data-theme="light"] {
+    /* Backgrounds */
+    --background-primary:            #ffffff;
+    --background-secondary:          #f5f6f8;
+    --background-primary-alt:        #f0f2f5;
+    --background-secondary-alt:      #eaecef;
+
+    /* Text */
+    --text-normal:                   #1c2128;
+    --text-muted:                    #57606a;
+    --text-faint:                    #8c959f;
+    --text-accent:                   #0969da;
+
+    /* Links */
+    --link-color:                    var(--text-accent);
+    --link-color-hover:              #1a7fd4;
+    --link-unresolved-color:         var(--text-muted);
+    --link-unresolved-opacity:       0.7;
+
+    /* Interactive */
+    --interactive-normal:            #eaeef2;
+    --interactive-hover:             #d8dee4;
+    --interactive-accent:            var(--text-accent);
+    --interactive-accent-hover:      #1a7fd4;
+
+    /* Borders */
+    --background-modifier-border:       #d0d7de;
+    --background-modifier-border-hover: #b0bac5;
+
+    /* Component tokens */
+    --dg-search-btn-bg:              var(--interactive-normal);
+    --dg-search-btn-color:           var(--text-normal);
+    --dg-search-btn-border:          var(--background-modifier-border);
+    --dg-search-btn-hover-bg:        var(--interactive-hover);
+    --dg-search-btn-hover-border:    var(--background-modifier-border-hover);
+
+    --dg-notelink-hover-bg:          rgba(9, 105, 218, 0.07);
+    --dg-filetree-border-color:      var(--background-modifier-border);
+
+    --dg-sidebar-bg:                 var(--background-secondary);
+    --dg-sidebar-border:             var(--background-modifier-border);
+
+    --dg-graph-bg:                   var(--background-primary);
+    --dg-graph-border-color:         var(--background-modifier-border);
+    --dg-graph-node-color:           var(--text-accent);
+    --dg-graph-node-color-muted:     var(--text-muted);
+
+    --dg-overlay-bg:                 rgba(240, 242, 245, 0.88);
+
+    color-scheme: light;
+}
+
+/* Light mode heading colors (readable on white) */
+[data-theme="light"] h1 { color: #9c6e00 !important; }
+[data-theme="light"] h2 { color: #bc4c00 !important; }
+[data-theme="light"] h3 { color: #2d6a1f !important; }
+[data-theme="light"] h4 { color: #0550ae !important; }
+
+/* Light mode code inline */
+[data-theme="light"] p > code {
+    color: #c7254e !important;
+    background-color: #f9f2f4 !important;
+}
+
+/* Light mode navbar / sidebar surfaces */
+[data-theme="light"] .navbar {
+    background-color: var(--background-secondary) !important;
+    border-bottom-color: var(--background-modifier-border) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .filetree-sidebar,
+[data-theme="light"] .sidebar {
+    background-color: var(--background-secondary) !important;
+}
+
+[data-theme="light"] .content {
+    background-color: var(--background-primary) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}

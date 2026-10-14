@@ -1,0 +1,11 @@
+{
+  "id": "theme-switcher",
+  "name": "Theme Switcher",
+  "version": "1.0.0",
+  "description": "Adds a light/dark mode toggle button to the file tree sidebar.",
+  "author": "kkantdev",
+  "slots": {
+    "filetree.actions": "templates/toggleButton.njk",
+    "common.footer": "templates/themeScript.njk"
+  }
+}

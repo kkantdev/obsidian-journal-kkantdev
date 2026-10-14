@@ -1,0 +1,10 @@
+{
+  "id": "copy-code",
+  "name": "Copy Code Button",
+  "version": "1.0.0",
+  "description": "Adds a Copy button to every rendered code block.",
+  "author": "kkantdev",
+  "slots": {
+    "common.footer": "templates/copyScript.njk"
+  }
+}

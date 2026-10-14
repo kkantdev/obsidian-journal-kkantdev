@@ -1,0 +1,64 @@
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "dg-theme";
+  var LIGHT_VALUE = "light";
+  var DARK_VALUE  = "dark";
+
+  function applyTheme(theme) {
+    if (theme === LIGHT_VALUE) {
+      document.documentElement.setAttribute("data-theme", LIGHT_VALUE);
+      document.body.setAttribute("data-theme", LIGHT_VALUE);
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      document.body.removeAttribute("data-theme");
+    }
+    updateButtonState(theme);
+  }
+
+  function updateButtonState(theme) {
+    var btn = document.getElementById("theme-toggle-btn");
+    if (!btn) return;
+    var darkIcon  = btn.querySelector(".theme-toggle-icon--dark");
+    var lightIcon = btn.querySelector(".theme-toggle-icon--light");
+    if (theme === LIGHT_VALUE) {
+      if (darkIcon)  darkIcon.style.display  = "none";
+      if (lightIcon) lightIcon.style.display = "";
+    } else {
+      if (darkIcon)  darkIcon.style.display  = "";
+      if (lightIcon) lightIcon.style.display = "none";
+    }
+  }
+
+  function toggleTheme() {
+    var current = localStorage.getItem(STORAGE_KEY) || DARK_VALUE;
+    var next = current === DARK_VALUE ? LIGHT_VALUE : DARK_VALUE;
+    localStorage.setItem(STORAGE_KEY, next);
+    applyTheme(next);
+  }
+
+  function init() {
+    // Restore persisted theme immediately
+    var saved = localStorage.getItem(STORAGE_KEY) || DARK_VALUE;
+    applyTheme(saved);
+
+    var btn = document.getElementById("theme-toggle-btn");
+    if (btn) {
+      btn.addEventListener("click", toggleTheme);
+    }
+  }
+
+  // Apply saved theme as early as possible to avoid flash
+  var savedEarly = localStorage.getItem(STORAGE_KEY) || DARK_VALUE;
+  if (savedEarly === LIGHT_VALUE) {
+    document.documentElement.setAttribute("data-theme", LIGHT_VALUE);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
