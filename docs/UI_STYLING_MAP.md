@@ -16,29 +16,31 @@
 **Primary Styling Files:**
 - `src/site/styles/digital-garden-base.scss` → Core layout and component styles (1000+ lines)
 - `src/site/styles/style.scss` → Base theme variables and callout styles
-- `src/site/styles/custom-style.scss` → **User customization file** (empty by default)
+- `src/site/styles/custom-style.scss` → **User customization file** (has been customized with dark color scheme, layout tweaks, copy button styles, theme toggle styles, and full light-mode overrides)
 - `src/site/styles/obsidian-bases.scss` → Dataview table and card styles
 - `src/site/styles/obsidian-base.scss` → Additional base styles
 
 ## 2. Color System
 
-**Color Variables (defined in `style.scss` and `digital-garden-base.scss`):**
+**Color Variables (defined in `style.scss` and `digital-garden-base.scss`, **overridden in `custom-style.scss`**):**
 
-| Purpose | Variable/File | Current Value | Used By |
-|---------|---------------|---------------|---------|
-| Background Primary | `--background-primary` | `rgb(32, 31, 31)` | Page background |
-| Background Secondary | `--background-secondary` | `rgb(57, 56, 56)` | Sidebars, navbar |
-| Text Normal | `--text-normal` | `#dcddde` | Body text |
-| Text Accent | `--text-accent` | `rgb(97, 186, 245)` | Links, accents |
-| Text Muted | `--text-muted` | Inherited from theme | Secondary text |
-| Text Faint | `--text-faint` | Inherited from theme | Tertiary text |
-| Link Color | `--link-color` | Inherited from theme | Standard links |
-| Link Color Hover | `--link-color-hover` | Inherited from theme | Link hover |
-| Interactive Normal | `--interactive-normal` | Inherited from theme | Interactive elements |
-| Interactive Hover | `--interactive-hover` | Inherited from theme | Interactive hover |
-| Graph Node Color | `--dg-graph-node-color` | `var(--text-accent)` | Active graph nodes |
-| Graph Node Color Muted | `--dg-graph-node-color-muted` | `var(--text-faint)` | Neighbor graph nodes |
-| Overlay Background | `--dg-overlay-bg` | `rgba(0, 0, 0, 0.5)` | Modal backdrops |
+| Purpose | Variable/File | Dark Mode Value | Light Mode Value | Used By |
+|---------|---------------|-----------------|------------------|---------|
+| Background Primary | `--background-primary` | `#0f1419` | `#ffffff` | Page background |
+| Background Secondary | `--background-secondary` | `#1a2029` | `#f5f6f8` | Sidebars, navbar |
+| Text Normal | `--text-normal` | `#e6edf3` | `#1c2128` | Body text |
+| Text Accent | `--text-accent` | `#58a6ff` | `#0969da` | Links, accents |
+| Text Muted | `--text-muted` | `#8b949e` | `#57606a` | Secondary text |
+| Text Faint | `--text-faint` | `#6e7681` | `#8c959f` | Tertiary text |
+| Link Color | `--link-color` | `var(--text-accent)` | `var(--text-accent)` | Standard links |
+| Link Color Hover | `--link-color-hover` | `#79c0ff` | `#1a7fd4` | Link hover |
+| Interactive Normal | `--interactive-normal` | `#30363d` | `#eaeef2` | Interactive elements |
+| Interactive Hover | `--interactive-hover` | `#3c444d` | `#d8dee4` | Interactive hover |
+| Border Color | `--background-modifier-border` | `#30363d` | `#d0d7de` | Borders |
+| Graph Node Color | `--dg-graph-node-color` | `var(--text-accent)` | `var(--text-accent)` | Active graph nodes |
+| Overlay Background | `--dg-overlay-bg` | `rgba(15,20,25,0.85)` | `rgba(240,242,245,0.88)` | Modal backdrops |
+
+**Theme Switching:** Controlled by `data-theme="light"` attribute on `<html>` / `<body>`. Dark is the default (no attribute). See Section 12 for the light-mode override block.
 
 **Heading Colors (defined in `style.scss`):**
 - h1: `#ffef60` (yellow)
@@ -262,6 +264,10 @@
 | Callouts | `custom-style.scss`: Override `.callout` styles and `--callout-*` variables |
 | Code blocks | Theme controls most styling, override in `custom-style.scss` |
 | Images | `custom-style.scss`: Override `img` styles or picture element |
+| **Copy button** ✨ | `custom-style.scss`: Override `.copy-code-btn` / `.copy-code-btn--copied` \| JS: `src/plugins/copy-code/templates/copyScript.njk` |
+| **Light/dark toggle button** ✨ | `custom-style.scss`: Override `.theme-toggle-btn` \| HTML: `src/plugins/theme-switcher/templates/toggleButton.njk` |
+| **Light mode colors** ✨ | `custom-style.scss`: Edit variables inside `[data-theme="light"]` block |
+| Enable/disable plugins | `src/plugins/plugins.json`: Set `"enabled": true/false` for plugin id |
 
 ## 12. Recommended Editing Strategy
 
@@ -307,3 +313,47 @@
 4. Test across breakpoints
 
 **Goal:** Make the smallest possible change in the most maintainable location. Always prefer CSS variable overrides in `custom-style.scss` over template modifications when possible.
+
+## 12. New Features Added (2026-10-14)
+
+### Copy Code Button
+
+**CSS class:** `.copy-code-btn`, `.copy-code-btn--copied`
+**CSS file:** `custom-style.scss` (section: COPY CODE BUTTON)
+**JS file:** `src/plugins/copy-code/templates/copyScript.njk`
+
+The button is absolutely positioned inside each `<pre>` at `top: 8px; right: 8px`. It uses:
+- `--interactive-normal` for background
+- `--text-muted` for default text color
+- `--background-modifier-border` for border
+- `#3fb950` for the green "Copied ✓" state
+
+To restyle, override `.copy-code-btn` in `custom-style.scss`.
+
+### Light / Dark Mode Toggle
+
+**CSS class:** `.theme-toggle-btn`, `.theme-toggle-label`, `.theme-toggle-icon--dark`, `.theme-toggle-icon--light`
+**CSS file:** `custom-style.scss` (sections: THEME TOGGLE BUTTON and LIGHT MODE)
+**Button template:** `src/plugins/theme-switcher/templates/toggleButton.njk`
+**Script template:** `src/plugins/theme-switcher/templates/themeScript.njk`
+
+**How it works:**
+1. Script reads `localStorage.getItem("dg-theme")` on page load (early, before DOMContentLoaded)
+2. If `"light"`, sets `data-theme="light"` on `<html>` and `<body>` immediately
+3. All `[data-theme="light"]` CSS variable overrides in `custom-style.scss` activate
+4. Clicking the button toggles and saves the new value to `localStorage`
+
+**To change light mode colors:** Edit the `[data-theme="light"]` block in `custom-style.scss`
+
+**To change the toggle button appearance:** Edit `.theme-toggle-btn` in `custom-style.scss` or the HTML in `toggleButton.njk`
+
+**Default color palette (dark mode, active by default):**
+- Background: `#0f1419` (deep blue-black)
+- Sidebar: `#1a2029`
+- Accent: `#58a6ff` (GitHub-blue)
+
+**Light mode palette (activated by toggle):**
+- Background: `#ffffff`
+- Sidebar: `#f5f6f8`
+- Accent: `#0969da` (GitHub-blue light)
+- Text: `#1c2128`

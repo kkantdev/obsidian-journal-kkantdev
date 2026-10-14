@@ -43,12 +43,19 @@ obsidian-digital-garden/
 │   │   ├── linkUtils.js          # Link resolution utilities
 │   │   ├── pluginLoader.js       # Plugin loading system
 │   │   └── utils.js              # General utilities
-│   ├── plugins/                   # Built-in plugins
+│   ├── plugins/                   # Built-in + custom plugins
 │   │   ├── dg-filetree/          # File tree sidebar
 │   │   ├── dg-link-preview/      # Link preview functionality
 │   │   ├── dg-math/              # Math equation support
 │   │   ├── dg-search/            # Full-text search
-│   │   └── dg-timestamps/        # Note timestamps
+│   │   ├── dg-timestamps/        # Note timestamps
+│   │   ├── copy-code/            # ✨ NEW: Copy button for code blocks
+│   │   │   ├── garden-plugin.json
+│   │   │   └── templates/copyScript.njk
+│   │   ├── theme-switcher/       # ✨ NEW: Light/Dark mode toggle
+│   │   │   ├── garden-plugin.json
+│   │   │   └── templates/ (toggleButton.njk, themeScript.njk)
+│   │   └── plugins.json          # ✨ NEW: Plugin registry (enables plugins)
 │   └── site/                     # Website source
 │       ├── _data/                # Eleventy data files
 │       ├── _includes/            # Templates and components
@@ -79,6 +86,9 @@ obsidian-digital-garden/
 | `src/site/_includes/layouts/index.njk` | Home page layout | Yes | Yes - For homepage changes |
 | `src/plugins/dg-search/templates/` | Search UI templates | Yes | Yes - For search UI modifications |
 | `src/plugins/dg-filetree/` | File tree plugin | Yes | Yes - For file tree UI changes |
+| `src/plugins/copy-code/` | ✨ NEW Copy button plugin | Yes | Yes - Edit `templates/copyScript.njk` for JS behavior |
+| `src/plugins/theme-switcher/` | ✨ NEW Light/Dark mode toggle plugin | Yes | Yes - Edit templates or CSS variables |
+| `src/plugins/plugins.json` | ✨ NEW Plugin registry | Yes | Yes - Enable/disable/order plugins here |
 | `.eleventy.js` | Eleventy configuration | Yes | NO - Build configuration, not UI |
 | `package.json` | Dependencies and scripts | Indirectly | NO - Build tooling only |
 
@@ -124,11 +134,12 @@ obsidian-digital-garden/
 | Cards | `src/site/styles/obsidian-bases.scss` (obsidian-base-card) | Card components for dataview |
 | Callouts | `src/site/styles/style.scss` (.callout) | Callout/alert styling |
 | Code Blocks | Default Eleventy/markdown-it | Code syntax highlighting |
+| **Copy Button** ✨ | `src/plugins/copy-code/templates/copyScript.njk` | Copy-to-clipboard button on every code block |
 | Images | `src/site/styles/digital-garden-base.scss` (img rules) | Image styling and optimization |
 | Modal/Dialog | `src/site/styles/digital-garden-base.scss` (search-container) | Search modal overlay |
 | Menus/Dropdowns | Not identified during repository analysis | |
 | Icons | `src/site/_includes/components/lucideIcons.njk` | Lucide icon system |
-| Theme Controls | Not identified during repository analysis | |
+| **Theme Toggle** ✨ | `src/plugins/theme-switcher/templates/toggleButton.njk` | Light/Dark mode button in left sidebar |
 | Responsive Behavior | Media queries throughout `digital-garden-base.scss` | Mobile/tablet adaptations |
 
 ## 6. Feature → File Map
@@ -143,6 +154,8 @@ obsidian-digital-garden/
 - **Math Support** → `src/plugins/dg-math/` (MathJax integration)
 - **Timestamps** → `src/plugins/dg-timestamps/` (note date display)
 - **Link Previews** → `src/plugins/dg-link-preview/` (hover previews)
+- **Copy Button** ✨ → `src/plugins/copy-code/` (JS injected via `common.footer` slot)
+- **Light/Dark Toggle** ✨ → `src/plugins/theme-switcher/` (toggle in `filetree.actions` slot, CSS in `custom-style.scss`)
 
 ## 7. Safe Editing Areas
 
@@ -218,3 +231,26 @@ obsidian-digital-garden/
    - `dist/` directory completely regenerated
    - `src/site/styles/_theme.*.css` → Generated theme cache files
 8. **CSS Variables**: Extensive CSS variable system in `digital-garden-base.scss` - override in `custom-style.scss`
+
+## 10. Recent Additions (2026-10-14)
+
+### Copy Button Plugin (`src/plugins/copy-code/`)
+- Adds a **Copy** button to every `<pre><code>` code block automatically
+- Button appears top-right, styled with existing CSS variables
+- Uses `navigator.clipboard.writeText()` with textarea fallback
+- State: `Copy` → `Copied ✓` → `Copy` (2 s delay)
+- Injected via `common.footer` slot (no template edits needed)
+- Enabled in `src/plugins/plugins.json`
+
+### Light / Dark Mode Toggle Plugin (`src/plugins/theme-switcher/`)
+- Adds a **☀️ / 🌙 Switch theme** button at the bottom of the left file-tree sidebar
+- Toggles `data-theme="light"` attribute on `<html>` / `<body>`
+- Full light-mode CSS variable overrides in `custom-style.scss` under `[data-theme="light"]`
+- Persists user preference in `localStorage` key `dg-theme`
+- Theme applied before DOMContentLoaded to prevent flash of wrong theme
+- Button injected via `filetree.actions` slot; script via `common.footer` slot
+- Enabled in `src/plugins/plugins.json`
+
+### Plugin Registry (`src/plugins/plugins.json`)
+- Created for the first time; controls which plugins are enabled and their render order
+- To disable a plugin: set `"enabled": false` for its entry
