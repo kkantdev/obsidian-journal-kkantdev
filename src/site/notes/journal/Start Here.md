@@ -1,6 +1,7 @@
 ---
-{"dg-publish":true,"permalink":"/journal/start-here/","tags":["journal","meta"]}
+{"dg-publish":true,"permalink":"/journal/start-here/","tags":["journal","meta"],"dg-note-properties":{"permalink":"/journal/start-here/","tags":["journal","meta"]}}
 ---
+
 
 # Start Here
 

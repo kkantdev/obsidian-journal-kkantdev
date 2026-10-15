@@ -1,6 +1,7 @@
 ---
-{"dg-publish":true,"permalink":"/","tags":["gardenEntry"],"dg-home":true}
+{"dg-publish":true,"permalink":"/journal/home/","tags":["gardenEntry"],"dg-note-properties":{"permalink":"/","tags":["gardenEntry"]}}
 ---
+
 
 # Krishna Kant's Digital Garden 🌱
 
