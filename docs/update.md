@@ -204,3 +204,149 @@ The file previously only had the dark-mode color system and layout tweaks.
 - Markdown rendering / syntax highlighting — untouched ✅
 - Obsidian publishing workflow — untouched ✅
 - GitHub integration — untouched ✅
+
+---
+
+## 2026-10-15 — Publishing Diagnosis & Recovery
+
+### Root Causes Found
+
+#### Problem 1 — Notes accidentally deleted from git
+
+**What happened:**
+Commit `21dae4b` ("notes") deleted all 21 markdown notes under `src/site/notes/Documents/`.
+This occurred because a `git add .` or similar command was run after the notes had been
+removed from the local working directory (files moved/deleted in Obsidian vault without
+being re-copied back into this repo folder).
+
+**Effect:** Notes removed from GitHub → Vercel rebuilt the site without them → pages disappeared from the live website.
+
+**Fix:** Used `git checkout b2c741c -- src/site/notes/Documents/` to restore all 21 notes
+from the original first commit in the git object store. No data was lost.
+
+#### Problem 2 — New `303_Journal_kkantdev/` folder was empty
+
+**What happened:**
+The folder `src/site/notes/303_Journal_kkantdev/` existed on disk but contained no files.
+Git does not track empty directories, so it was never committed or pushed.
+New notes created in Obsidian for this folder were **never copied into this repository**
+by the Digital Garden plugin — the sync step was skipped.
+
+**Fix:** Added a `.gitkeep` placeholder so the folder is tracked in git.
+Notes must be published from Obsidian using the Digital Garden plugin to populate this folder.
+
+#### Problem 3 — Stray file at repo root
+
+**What happened:**
+A file literally named `h -u origin main --force-with-lease` was created at the repo root.
+This happened when a git push command was mistyped in the shell and shell output
+was accidentally redirected into a new file instead of executing the push.
+
+**Fix:** Deleted the stray file before committing.
+
+---
+
+### How the Publishing Pipeline Works
+
+```
+Obsidian (your vault)
+    ↓  Digital Garden plugin marks note with: dg-publish: true
+    ↓  Plugin syncs the note file into this repo:
+src/site/notes/<folder>/<note-name>.md
+    ↓  You commit and push:
+github.com/kkantdev/obsidian-journal-kkantdev  (main branch)
+    ↓  Vercel detects the push automatically
+    ↓  Vercel runs: npm install && npm run build
+    ↓  Eleventy reads all .md files under src/site/notes/
+dist/   ← generated static website
+    ↓  Vercel serves the dist/ folder as your live website
+```
+
+---
+
+### Correct Publishing Workflow
+
+#### To publish a note (new or edited)
+
+1. In **Obsidian**, open the note. The Digital Garden plugin adds to its frontmatter:
+   ```yaml
+   dg-publish: true
+   ```
+2. Click **"Publish"** in the Obsidian Digital Garden plugin — it copies/syncs the note
+   into `src/site/notes/<path>/` in this repo folder on your computer.
+3. In VS Code terminal (or any terminal in this project folder):
+   ```bash
+   git add src/site/notes/
+   git commit -m "publish: <brief description of what changed>"
+   git push origin main
+   ```
+4. Vercel detects the push and rebuilds in ~1–2 minutes. Done.
+
+#### To publish a note in a new folder
+
+1. Create the folder and notes in your Obsidian vault.
+2. Add `dg-publish: true` to each note's frontmatter.
+3. Use the Obsidian Digital Garden plugin to sync — it creates the subfolder inside
+   `src/site/notes/` automatically.
+4. Commit and push as above.
+
+> **Note:** `src/site/notes/303_Journal_kkantdev/` currently contains only a `.gitkeep`
+> placeholder. To put notes there, use the Obsidian Digital Garden plugin to sync notes
+> from your vault into that folder. The plugin will create the `.md` files. Then commit
+> and push.
+
+#### To verify GitHub received your changes
+
+```bash
+git log --oneline -5     # confirm your commit is the latest
+git push origin main     # push if not already done
+```
+
+Then visit: https://github.com/kkantdev/obsidian-journal-kkantdev
+Check that your files appear under `src/site/notes/` in the repository.
+
+#### To verify deployment
+
+Open your live Vercel URL. If the site hasn't updated within 3 minutes of pushing,
+go to Vercel Dashboard → your project → **Deployments** tab → check for build errors.
+
+---
+
+### Frontmatter Required for Publishing
+
+Every note must have `dg-publish: true`. The Digital Garden Obsidian plugin sets this
+automatically when you publish. Example of what the plugin generates:
+
+```yaml
+---
+{"dg-publish":true,"permalink":"/documents/my-note/","tags":["mytag"]}
+---
+```
+
+- `permalink` — sets the URL path on your website
+- `tags: ["gardenEntry"]` — marks a note as the home page (`/`)
+
+---
+
+### Troubleshooting Future Publishing Failures
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| Note not on website | `dg-publish: true` missing | Add it in Obsidian, re-sync with plugin |
+| Note not on website | File not committed/pushed | Run `git add`, `git commit`, `git push` |
+| Note not on website | Vercel build failed | Check Vercel Dashboard → Deployments |
+| Notes disappeared | Accidental deletion before commit | Restore: `git checkout <commit> -- src/site/notes/` |
+| Push rejected "stale info" | Remote has commits not local | Run `git fetch origin` then `git pull --rebase origin main` |
+| Empty folder not tracked | Git ignores empty dirs | Add `.gitkeep` file inside the folder |
+| Stray file at root | Mistyped shell command | Delete the file; do NOT commit it |
+
+---
+
+### Files Changed in This Recovery (2026-10-15)
+
+| File | Action |
+|------|--------|
+| `src/site/notes/Documents/` (21 files) | ✅ Restored from git history |
+| `src/site/notes/303_Journal_kkantdev/.gitkeep` | 🆕 Created to track new folder |
+| `h -u origin main --force-with-lease` (root) | 🗑️ Deleted (stray file) |
+| `docs/update.md` | ✏️ This entry added |
