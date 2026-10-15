@@ -350,3 +350,113 @@ automatically when you publish. Example of what the plugin generates:
 | `src/site/notes/303_Journal_kkantdev/.gitkeep` | 🆕 Created to track new folder |
 | `h -u origin main --force-with-lease` (root) | 🗑️ Deleted (stray file) |
 | `docs/update.md` | ✏️ This entry added |
+
+---
+
+## 2026-10-15 — Fresh Start: Replace Old Notes with New Journal Folder
+
+### Intent
+
+Intentionally replaced the old `Documents/` note collection with a clean new `Journal/`
+folder. The old notes were not wanted. This is not a recovery — it is a deliberate clean
+slate.
+
+### What Was Removed
+
+| Folder | Notes Removed |
+|--------|--------------|
+| `src/site/notes/Documents/` | 21 notes (all subfolders) — permanently removed |
+| `src/site/notes/303_Journal_kkantdev/` | Renamed to `Journal/` |
+
+### What Was Created
+
+```
+src/site/notes/Journal/
+├── Home.md               ← Digital Garden home page (gardenEntry / site root /)
+├── Start Here.md         ← Orientation note explaining garden structure
+├── Daily/.gitkeep        ← Subfolder for daily journal entries
+├── Technical/.gitkeep    ← Subfolder for code, commands, how-tos
+├── Projects/.gitkeep     ← Subfolder for project documentation
+└── Ideas/.gitkeep        ← Subfolder for experiments and drafts
+```
+
+### Why the New Folder Works
+
+The Digital Garden publishing system (Eleventy) reads **all** `.md` files under
+`src/site/notes/` regardless of subfolder name. No configuration change was needed.
+The folder name `Journal` works natively.
+
+### How Publishing Works With the New Folder
+
+#### From Obsidian (automatic sync)
+
+When you publish a note using the **Obsidian Digital Garden plugin**, it syncs the note
+into `src/site/notes/Journal/<your-note>.md` automatically, provided you:
+
+1. Set the Digital Garden plugin's **"Note Folder"** to `src/site/notes/Journal` (or your chosen subfolder)
+2. Add `dg-publish: true` to the note's frontmatter
+
+Then commit and push:
+
+```bash
+git add src/site/notes/
+git commit -m "publish: <description>"
+git push origin main
+```
+
+Vercel rebuilds and the note appears on your live website within 1–2 minutes.
+
+#### From VS Code / terminal (manual)
+
+1. Create or edit a `.md` file inside `src/site/notes/Journal/` (or any subfolder)
+2. Add frontmatter:
+   ```yaml
+   ---
+   {"dg-publish":true,"permalink":"/journal/my-note/","tags":["journal"]}
+   ---
+   ```
+3. Commit and push:
+   ```bash
+   git add src/site/notes/Journal/
+   git commit -m "publish: my-note"
+   git push origin main
+   ```
+
+### Obsidian Plugin Settings to Configure
+
+Open **Obsidian → Settings → Digital Garden** and set:
+
+| Setting | Value |
+|---------|-------|
+| GitHub repo name | `obsidian-journal-kkantdev` |
+| GitHub username | `kkantdev` |
+| GitHub token | *(your fine-grained Personal Access Token — see below)* |
+| Note folder | `src/site/notes` *(plugin handles subfolder from vault structure)* |
+
+**GitHub Token:** Create a fine-grained token at
+`github.com → Settings → Developer settings → Personal access tokens → Fine-grained tokens`
+with **Contents: Read and Write** permission on the `obsidian-journal-kkantdev` repository only.
+Enter it in the plugin settings — never paste it into chat or commit it to the repo.
+
+### Frontmatter Reference
+
+| Frontmatter key | Purpose |
+|----------------|---------|
+| `"dg-publish":true` | **Required.** Marks the note for publishing. |
+| `"permalink":"/journal/my-note/"` | Sets the URL on your website. |
+| `"tags":["gardenEntry"]` | Makes this note the home page (`/`). Use on one note only. |
+| `"tags":["journal","daily"]` | Regular tags for organization/filtering. |
+
+### Files Changed
+
+| File | Action |
+|------|--------|
+| `src/site/notes/Documents/` (21 notes) | 🗑️ Permanently removed |
+| `src/site/notes/303_Journal_kkantdev/` | 🔄 Renamed to `Journal/` |
+| `src/site/notes/Journal/Home.md` | 🆕 Created — Digital Garden home page |
+| `src/site/notes/Journal/Start Here.md` | 🆕 Created — orientation note |
+| `src/site/notes/Journal/Daily/.gitkeep` | 🆕 Created — subfolder placeholder |
+| `src/site/notes/Journal/Technical/.gitkeep` | 🆕 Created — subfolder placeholder |
+| `src/site/notes/Journal/Projects/.gitkeep` | 🆕 Created — subfolder placeholder |
+| `src/site/notes/Journal/Ideas/.gitkeep` | 🆕 Created — subfolder placeholder |
+| `docs/update.md` | ✏️ This entry added |

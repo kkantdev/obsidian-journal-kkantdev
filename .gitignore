@@ -13,3 +13,5 @@ src/site/_includes/plugins/
 .cache
 _site/
 **/.DS_Store
+# Obsidian vault config (never commit these)
+**/.obsidian/
